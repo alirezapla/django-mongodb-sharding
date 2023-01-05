@@ -1,0 +1,145 @@
+version: '3'
+services:
+
+  # Django App
+  app:
+    build:
+      context: .
+      dockerfile: services/Dockerfile
+    container_name: app
+    restart: always
+    command: python manage.py runserver 0.0.0.0:80 --insecure
+    depends_on:
+      - db
+    ports:
+      - 5761:80
+    volumes:
+      - ./app:/app
+
+
+
+
+  # Config Servers
+  config1:
+    image: mongo
+    command: mongod --port 27017 --configsvr --replSet configserver --noprealloc --smallfiles --oplogSize 16
+    ports:
+      - 27001:27017
+    volumes:
+      - ./scripts:/scripts
+      - shard1configa-volume:/data/db
+    links:
+      - shard1a
+      - shard2a
+
+  config2:
+    image: mongo
+    command: mongod --port 27017 --configsvr --replSet configserver --noprealloc --smallfiles --oplogSize 16
+    ports:
+      - 27002:27017
+    volumes:
+      - ./scripts:/scripts
+      - shard1configb-volume:/data/db
+    links:
+      - config1
+
+  config3:
+    image: mongo
+    command: mongod --port 27017 --configsvr --replSet configserver --noprealloc --smallfiles --oplogSize 16
+    ports:
+      - 27003:27017
+    volumes:
+      - ./scripts:/scripts
+      - shard1configb-volume:/data/db
+    links:
+      - config2
+
+
+  # Shards
+  shard1a:
+    image: mongo
+    container_name: shard1a
+    command: mongod --port 27017 --shardsvr --replSet shard01 --noprealloc --smallfiles --oplogSize 16
+    ports:
+      - 27111:27017
+    links:
+      - shard1b
+    volumes:
+      - ./scripts:/scripts
+      - /var/run/docker.sock:/var/run/docker.sock
+      - shard1a-volume:/data/db
+    cpus: 0.2
+    mem_limit: 200000000
+
+  shard1b:
+    image: mongo
+    container_name: shard1b
+    command: mongod --port 27017 --shardsvr --replSet shard01 --noprealloc --smallfiles --oplogSize 16
+    ports:
+      - 27112:27017
+    volumes:
+      - ./scripts:/scripts
+      - shard1b-volume:/data/db
+    cpus: 0.2
+    mem_limit: 200000000
+
+  shard2a:
+    image: mongo
+    container_name: shard2a
+    command: mongod --port 27017 --shardsvr --replSet shard01 --noprealloc --smallfiles --oplogSize 16
+    links:
+      - shard2b
+    ports:
+      - 27221:27017
+    volumes:
+      - ./scripts:/scripts
+      - /var/run/docker.sock:/var/run/docker.sock
+      - shard2a-volume:/data/db
+    cpus: 0.2
+    mem_limit: 200000000
+
+  shard2b:
+    image: mongo
+    container_name: shard2b
+    command: mongod --port 27017 --shardsvr --replSet shard01 --noprealloc --smallfiles --oplogSize 16
+    ports:
+      - 27222:27017
+    volumes:
+      - ./scripts:/scripts
+      - shard2b-volume:/data/db
+    cpus: 0.2
+    mem_limit: 200000000
+
+
+
+  # Router
+  router:
+    image: mongo
+    container_name: router
+    command: mongos --port 27017 --configdb configserver/config1:27017,config2:27017,config3:27017 --bind_ip_all
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+    volumes:
+      - ./scripts:/scripts
+      - shardsrouter-volume:/data/db
+
+    depends_on:
+      - config1
+      - config2
+      - config3
+      - shard1a
+      - shard1b
+      - shard2a
+      - shard2b
+
+volumes:
+  db-volume:
+  shards01configa-volume:
+  shards01configb-volume:
+  shards01a-volume:
+  shards01b-volume:
+  shardsrouter-volume:
