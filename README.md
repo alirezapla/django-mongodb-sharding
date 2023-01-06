@@ -13,4 +13,9 @@ then run `mongo_init.sh`
 ```bash
 sh mongo_init.sh
 ```
+Enable sharding 
+
+```bash
+sh enable_sharding.sh
+```
 ready to use
