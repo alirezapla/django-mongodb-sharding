@@ -1,22 +1,12 @@
 import os
 from pathlib import Path
 from decouple import config
+import mongoengine
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-from pydantic import BaseSettings
-
-
-class Configs(BaseSettings):
-    SECRET_KEY: str = config('SECRET_KEY')
-    DEBUG: str = config('DEBUG')
-    ALLOWED_HOSTS: list = config('ALLOWED_HOSTS')
-
-    class Config:
-        env_file = ".env"
-
-# SECRET_KEY = config('SECRET_KEY')
-# DEBUG = config('DEBUG')
-# ALLOWED_HOSTS = config('ALLOWED_HOSTS')
+SECRET_KEY = config('SECRET_KEY')
+DEBUG = config('DEBUG')
+ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(" ")
 
 
 INSTALLED_APPS = [
@@ -26,11 +16,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #other
-    'django_mongoengine'
-    'django-ninja'
-    #my
-    'socialmedia.apps.SocialmediaConfig'
+    # other
+    'django_mongoengine',
+    'ninja',
+    # my
+    'socialmedia.apps.SocialmediaConfig',
 ]
 
 MIDDLEWARE = [
@@ -64,12 +54,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+
 MONGODB_DATABASES = {
     "default": {
         "name": config('MONGO_NAME'),
@@ -79,6 +64,16 @@ MONGODB_DATABASES = {
         "tz_aware": True,
     },
 }
+
+mongoengine.connect(
+    db=MONGODB_DATABASES['default']['name'],
+    host=MONGODB_DATABASES['default']['host'],
+    username=MONGODB_DATABASES['default']['username'],
+    password=MONGODB_DATABASES['default']['password']
+
+)
+
+MONGOENGINE_USER_DOCUMENT = 'users.models.User'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -95,7 +90,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -109,7 +103,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 
 LOGGING = {
     'version': 1,
