@@ -1,7 +1,28 @@
-from datetime import date
+from datetime import datetime
 from ninja import Schema
 
 
-class User(Schema):
+# Todo add validation
+class UserSchema(Schema):
     username: str
-    department_id: int = None
+    created_at: datetime = None
+
+
+# Todo add validation
+class LikeSchema(Schema):
+    liker: str
+    created_at: datetime = None
+
+
+# Todo add validation
+class CommentSchema(Schema):
+    author: str
+    text: str
+    created_at: datetime = None
+
+
+# Todo add validation
+class PostSchema(Schema):
+    owner_id: str
+    content: str
+    created_at: datetime = None
