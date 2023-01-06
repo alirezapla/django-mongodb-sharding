@@ -1,10 +1,8 @@
-FROM python:3.6
-
-COPY ./app /app
+FROM python:3.9
+ENV PYTHONDONTWRITEBYTECODE 1,PYTHONUNBUFFERED 1
+COPY ./src /app
 WORKDIR /app
 
+RUN python3 -m pip install --upgrade pip
 RUN pip install -r requirements.txt
 
-COPY ./docker/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-ENTRYPOINT ["sh", "/entrypoint.sh"]
