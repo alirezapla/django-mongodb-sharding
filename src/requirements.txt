@@ -2,3 +2,6 @@ Django==4.0.1
 django-ninja==0.20.0
 gunicorn
 mongoengine==0.25.0
+python-decouple
+django_mongoengine
+orjson
