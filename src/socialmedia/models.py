@@ -18,7 +18,10 @@ class User(Document):
     def created_datetime(self):
         return self.created_at
 
-
+    meta = {
+        'shard_key': ('_indexName_')
+    }
+    
 class Like(EmbeddedDocument):
     created_at = db.DateTimeField(
         default=datetime.datetime.now, editable=False,
@@ -32,7 +35,9 @@ class Like(EmbeddedDocument):
 
     def created_datetime(self):
         return self.created_at
-
+    meta = {
+        'shard_key': ('_indexName_')
+    }
 
 class Comment(EmbeddedDocument):
     created_at = db.DateTimeField(
@@ -49,7 +54,9 @@ class Comment(EmbeddedDocument):
 
     def created_datetime(self):
         return self.created_at
-
+    meta = {
+        'shard_key': ('_indexName_')
+    }
 
 class Post(Document):
     created_at = db.DateTimeField(
@@ -73,3 +80,6 @@ class Post(Document):
             'comments': self.comments,
             'created_at': self.created_at
         }
+    meta = {
+        'shard_key': ('_indexName_')
+    }
