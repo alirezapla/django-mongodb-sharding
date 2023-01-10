@@ -19,7 +19,8 @@ class User(Document):
         return self.created_at
 
     meta = {
-        'shard_key': ('_indexName_')
+        'shard_key': ('username'),
+        'indexes': ['name'],
     }
     
 class Like(EmbeddedDocument):
@@ -36,7 +37,8 @@ class Like(EmbeddedDocument):
     def created_datetime(self):
         return self.created_at
     meta = {
-        'shard_key': ('_indexName_')
+        'shard_key': ('_indexName_'),
+        'indexes': ['liker']
     }
 
 class Comment(EmbeddedDocument):
@@ -56,6 +58,7 @@ class Comment(EmbeddedDocument):
         return self.created_at
     meta = {
         'shard_key': ('_indexName_')
+        'indexes': ['author']
     }
 
 class Post(Document):
