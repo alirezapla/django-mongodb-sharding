@@ -57,7 +57,7 @@ class Comment(EmbeddedDocument):
     def created_datetime(self):
         return self.created_at
     meta = {
-        'shard_key': ('_indexName_')
+        'shard_key': ('_indexName_'),
         'indexes': ['author']
     }
 
