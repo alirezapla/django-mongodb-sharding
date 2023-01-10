@@ -40,6 +40,17 @@ services:
       - config2-volume:/data/db
     links:
       - config1
+      
+  config3:
+    image: mongo
+    command: mongod --port 27017 --configsvr --replSet configserver
+    ports:
+      - 27002:27017
+    volumes:
+      - ./scripts:/scripts
+      - config3-volume:/data/db
+    links:
+      - config2
 
 
 
@@ -120,6 +131,7 @@ services:
     depends_on:
       - config1
       - config2
+      - config3
       - shard1a
       - shard1b
       - shard2a
@@ -128,6 +140,7 @@ services:
 volumes:
   config1-volume:
   config2-volume:
+  config3-volume:
   shard1a-volume:
   shard1b-volume:
   shard2a-volume:
