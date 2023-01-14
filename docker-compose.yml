@@ -57,8 +57,8 @@ services:
       - ./scripts:/scripts
       - /var/run/docker.sock:/var/run/docker.sock
       - shard1a-volume:/data/db
-    cpus: 0.2
-    mem_limit: 200000000
+#    cpus: 0.2
+#    mem_limit: 200000000
 
   shard1b:
     image: mongo
@@ -69,8 +69,8 @@ services:
     volumes:
       - ./scripts:/scripts
       - shard1b-volume:/data/db
-    cpus: 0.2
-    mem_limit: 200000000
+#    cpus: 0.2
+#    mem_limit: 200000000
 
   shard2a:
     image: mongo
@@ -82,10 +82,10 @@ services:
       - 27221:27017
     volumes:
       - ./scripts:/scripts
-      - /var/run/docker.sock:/var/run/docker.sock
+#      - /var/run/docker.sock:/var/run/docker.sock
       - shard2a-volume:/data/db
-    cpus: 0.2
-    mem_limit: 200000000
+#    cpus: 0.2
+#    mem_limit: 200000000
 
   shard2b:
     image: mongo
@@ -96,8 +96,8 @@ services:
     volumes:
       - ./scripts:/scripts
       - shard2b-volume:/data/db
-    cpus: 0.2
-    mem_limit: 200000000
+#    cpus: 0.2
+#    mem_limit: 200000000
 
 
 
@@ -110,8 +110,8 @@ services:
       - 27017:27017
     restart: always
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+#      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+#      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
       MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
     volumes:
       - ./scripts:/scripts

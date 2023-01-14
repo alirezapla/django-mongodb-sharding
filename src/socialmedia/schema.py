@@ -23,6 +23,6 @@ class CommentSchema(Schema):
 
 # Todo add validation
 class PostSchema(Schema):
-    owner_id: str
+    owner: str
     content: str
     created_at: datetime = None

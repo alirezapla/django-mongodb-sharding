@@ -12,7 +12,7 @@ def root(request):
 
 @api.post("/user", tags=['Users'])
 def new_user(request, user_body: UserSchema):
-    res = user.new(user_body)
+    res = user.add(user_body)
     return {"response": res}
 
 

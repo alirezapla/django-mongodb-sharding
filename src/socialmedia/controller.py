@@ -102,7 +102,7 @@ class UserCRUD:
         res = User.objects.delete(id=user_id)
         return orjson.loads(res.to_json())
 
-    def new(self, item: dict):
+    def add(self, item: dict):
         res = User.objects.create(**item.dict())
         return orjson.loads(res.to_json())
 

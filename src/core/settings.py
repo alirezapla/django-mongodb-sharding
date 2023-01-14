@@ -59,8 +59,8 @@ MONGODB_DATABASES = {
     "default": {
         "name": config('MONGO_NAME'),
         "host": config('MONGO_HOST'),
-        "password": config('MONGO_PASS'),
-        "username": config('MONGO_USER'),
+        # "password": config('MONGO_PASS'),
+        # "username": config('MONGO_USER'),
         "tz_aware": True,
     },
 }
@@ -68,8 +68,8 @@ MONGODB_DATABASES = {
 mongoengine.connect(
     db=MONGODB_DATABASES['default']['name'],
     host=MONGODB_DATABASES['default']['host'],
-    username=MONGODB_DATABASES['default']['username'],
-    password=MONGODB_DATABASES['default']['password']
+    # username=MONGODB_DATABASES['default']['username'],
+    # password=MONGODB_DATABASES['default']['password']
 
 )
 
