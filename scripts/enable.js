@@ -1,3 +1,5 @@
-sh.enableSharding("DB_NAME")
-
-db.adminCommand( { shardCollection: "DB_NAME.MyCollection", key: { oemNumber: "hashed", zipCode: 1, supplierId: 1 } } )
+sh.enableSharding("django_mongodb")
+sh.shardCollection('django_mongodb.post',{owner:"hashed"})
+sh.shardCollection('django_mongodb.user',{username:"hashed"})
+sh.shardCollection('django_mongodb.liker',{liker:"hashed"})
+sh.shardCollection('django_mongodb.comment',{author:"hashed"})
