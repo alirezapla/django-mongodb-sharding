@@ -9,6 +9,8 @@ class PostCRUD:
 
     def retrive_by_user(self, user_id: str):
         res = self.post.filter(owner=user_id)
+        print(res)
+
         if res:
             _posts = [_post.as_dict() for _post in res]
             for _post in _posts:
@@ -58,26 +60,22 @@ class PostCRUD:
         return orjson.loads(res.to_json())
 
     def update_by_comment(self, post_id: str, comment_body: dict):
-        res = self.post.get(id=post_id)
+        res = self.post(id=post_id)
         if res:
             _comment = Comment()
             _comment.text, _comment.author = comment_body['text'], comment_body['author']
-            post_comment = res.comments
-            post_comment.append(_comment)
-            res.comments = post_comment
-            res.save()
+            res.update_one(push__comments=_comment)
             return _comment.as_dict()
 
     def update_by_like(self, post_id: str, like_body: dict):
-        res = self.post.get(id=post_id)
+        res = self.post(id=post_id)
         if res:
             _like = Like()
             _like.liker = like_body['liker']
-            post_like = res.likes
-            post_like.append(_like)
-            res.likes = post_like
-            res.save()
+            res.update_one(push__likes=_like)
             return _like.as_dict()
+
+
 
     @staticmethod
     def _remove_nested_items(document: dict):

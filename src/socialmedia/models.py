@@ -11,18 +11,20 @@ class User(Document):
 
     def as_dict(self):
         return {
-            'id': self.id,
+            'id': str(self.id),
             'username': self.username,
         }
 
     def created_datetime(self):
         return self.created_at
 
+
     meta = {
         'shard_key': ('username'),
-        'indexes': ['name'],
+        'indexes': ['username'],
     }
-    
+
+
 class Like(EmbeddedDocument):
     created_at = db.DateTimeField(
         default=datetime.datetime.now, editable=False,
@@ -36,10 +38,12 @@ class Like(EmbeddedDocument):
 
     def created_datetime(self):
         return self.created_at
+
     meta = {
-        'shard_key': ('_indexName_'),
+        'shard_key': ('liker'),
         'indexes': ['liker']
     }
+
 
 class Comment(EmbeddedDocument):
     created_at = db.DateTimeField(
@@ -56,10 +60,12 @@ class Comment(EmbeddedDocument):
 
     def created_datetime(self):
         return self.created_at
+
     meta = {
-        'shard_key': ('_indexName_'),
+        'shard_key': ('author'),
         'indexes': ['author']
     }
+
 
 class Post(Document):
     created_at = db.DateTimeField(
@@ -76,13 +82,15 @@ class Post(Document):
 
     def as_dict(self):
         return {
-            'id': self.id,
+            'id': str(self.id),
             'owner': self.owner,
             'likes': self.likes,
             'content': self.content,
             'comments': self.comments,
             'created_at': self.created_at
         }
+
     meta = {
-        'shard_key': ('_indexName_')
+        'shard_key': ('owner'),
+        'indexes': ['owner']
     }
