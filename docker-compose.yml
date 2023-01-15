@@ -45,7 +45,7 @@ services:
     image: mongo
     command: mongod --port 27017 --configsvr --replSet configserver
     ports:
-      - 27002:27017
+      - 27003:27017
     volumes:
       - ./scripts:/scripts
       - config3-volume:/data/db
@@ -121,8 +121,8 @@ services:
       - 27017:27017
     restart: always
     environment:
-#      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-#      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
       MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
     volumes:
       - ./scripts:/scripts
