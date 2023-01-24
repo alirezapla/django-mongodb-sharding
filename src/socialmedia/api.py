@@ -38,7 +38,7 @@ def add_post(request, post_body: PostSchema):
 
 @api.get("/posts/{user_id}", tags=['Posts'])
 def user_posts(request, user_id: str):
-    # validation_object_id(user_id)
+    validation_object_id(user_id)
     res = post.retrive_by_user(user_id)
     return {"response": res}
 
