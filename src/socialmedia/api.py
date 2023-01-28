@@ -1,5 +1,5 @@
 from ninja import NinjaAPI
-from .controller import post, user
+from .service import post, user
 from .schema import UserSchema, PostSchema, CommentSchema, LikeSchema
 from .utils import validation_object_id
 api = NinjaAPI(title='SocialMedia', version='0.0.1')
